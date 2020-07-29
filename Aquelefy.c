@@ -34,12 +34,14 @@ int main(){
 	menu();
 	return 0;
 }
+//Fun√ß√£o que imprime cabe√ßalho formatado
 int cabecalho(){
 	system("cls");
 	printf("%-9s %-36s %-36s %-15s %-9s %s\n", "ID", "NOME DA MUSICA", "NOME DO ARTISTA", "ESTILO", "TEMPO", "DATA DO CADASTRO");
 	printf("------------------------------------------------------------------------------------------------------------------------------\n");
 	return 0;
 }
+//Fun√ß√£o para imprimir formatado de acordo o cabe√ßalho
 int imprimir_formatado(musica m){
 	printf("%-9d %-36s %-36s %-15s %-9d ", m.id, m.nome_musica, m.nome_artista, m.estilo, m.tempo);
 	if(m.dia < 10)
@@ -53,6 +55,7 @@ int imprimir_formatado(musica m){
 	printf("%d\n", m.ano);
 	return 0;
 }
+//criar arquivo
 void gravar_arquivo(){
 	FILE *arquivo;
 	arquivo = fopen(NOME_ARQUIVO, "rb");
@@ -61,6 +64,7 @@ void gravar_arquivo(){
 	}
 	fclose(arquivo);
 }
+//registrar m√∫sica nova
 void cadastrar_musica(){
 	musica temp;
 	FILE *arquivo;
@@ -75,19 +79,19 @@ void cadastrar_musica(){
  	//utilizamos a fun√ß√£o localtime  
   	data_hora_atual = localtime(&segundos); 
 	system("cls");
-	printf("---------------CADASTRO DE M⁄SICA---------------\n");
+	printf("---------------CADASTRO DE M√öSICA---------------\n");
 	setbuf(stdin, NULL);
-	printf("Nome da m˙sica: ");
+	printf("Nome da m√∫sica: ");
 	gets(temp.nome_musica);
 	setbuf(stdin, NULL);
 	printf("Nome do artista/banda: ");
 	gets(temp.nome_artista);
 	setbuf(stdin, NULL);
-	printf("Estilo da m˙sica: ");
+	printf("Estilo da m√∫sica: ");
 	gets(temp.estilo);
 	do{
 		setbuf(stdin, NULL);
-		printf("Duracao da m˙sica (segundos): ");
+		printf("Duracao da m√∫sica (segundos): ");
 		scanf("%d", &temp.tempo);
 		if(temp.tempo <= 0)
 			printf("DIGITE UMA DURACAO VALIDA\n");
@@ -102,9 +106,10 @@ void cadastrar_musica(){
 	fwrite(&temp, sizeof(musica), 1, arquivo);
 	fclose(arquivo);
 	system("cls");
-	printf("M⁄SICA CADASTRADA COM SUCESSO!\n");
+	printf("M√öSICA CADASTRADA COM SUCESSO!\n");
 	getch();
 }
+//listar musica cadastrada
 void visualizar_musicas(){
 	FILE *arquivo;
 	musica m;
@@ -116,6 +121,7 @@ void visualizar_musicas(){
 			imprimir_formatado(m);
 	}
 }
+//pesquisar m√∫sica pelo ID
 void pesquisar_musica(){
 	FILE *arquivo;
 	musica m;
@@ -124,7 +130,7 @@ void pesquisar_musica(){
 	int procura_id;
 	int cont = 0;
 	system("cls");
-	printf("Digite o ID da m˙sica desejada: ");
+	printf("Digite o ID da m√∫sica desejada: ");
 	scanf("%d", &procura_id);
 	while(!feof(arquivo)){
 		fread(&m, sizeof(musica), 1, arquivo);
@@ -142,11 +148,12 @@ void pesquisar_musica(){
 		
 	}
 	if (cont == 0){
-		printf("ID N√O ENCONTRADO!\n");
+		printf("ID N√ÉO ENCONTRADO!\n");
 	}
 	fclose(arquivo);
 	getch();	
 }
+//calculo tempo  total das m√∫sicas cadastradas em minutos
 void tempo_total(){
 	FILE *arquivo;
 	musica m;
@@ -164,6 +171,7 @@ void tempo_total(){
 	fclose(arquivo);
 	getch();
 }
+//exibir maior e menor m√∫sicas cadastradas
 void maior_menor(){
 	FILE *arquivo;
 	musica temp, maior, menor;
@@ -191,8 +199,8 @@ void maior_menor(){
 				}
 			}
 		}
-		printf("M˙sica com maior duraÁ„o: %s\n", maior.nome_musica);
-		printf("M˙sica com menor duraÁ„o: %s\n", menor.nome_musica);
+		printf("M√∫sica com maior dura√ß√£o: %s\n", maior.nome_musica);
+		printf("M√∫sica com menor dura√ß√£o: %s\n", menor.nome_musica);
 	}
 	else{
 		printf("Nenhuma musica encontrada!\n");
@@ -200,6 +208,7 @@ void maior_menor(){
 	fclose(arquivo);
 	getch();
 }
+//editar m√∫sicas previamente cadastradas
 int editar(){
 	struct tm *data_hora_atual;     
   	time_t segundos;
@@ -225,7 +234,7 @@ int editar(){
 		posicao++;
 	}
 	if (cont == 0){
-		printf("ID N√O ENCONTRADO!\n");
+		printf("ID N√ÉO ENCONTRADO!\n");
 		getch();
 		return 0;
 	}
@@ -255,7 +264,7 @@ int editar(){
 						break;
 					case 1:
 						setbuf(stdin, NULL);
-						printf("Nome da m˙sica: ");
+						printf("Nome da m√∫sica: ");
 						gets(m.nome_musica);
 						break;
 					case 2:
@@ -265,13 +274,13 @@ int editar(){
 						break;
 					case 3:
 						setbuf(stdin, NULL);
-						printf("Estilo da m˙sica: ");
+						printf("Estilo da m√∫sica: ");
 						gets(m.estilo);
 						break;
 					case 4:
 						do{
 							setbuf(stdin, NULL);
-							printf("Duracao da m˙sica (segundos): ");
+							printf("Duracao da m√∫sica (segundos): ");
 							scanf("%d", &m.tempo);
 							if(m.tempo <= 0)
 								printf("DIGITE UMA DURACAO VALIDA\n");
@@ -295,6 +304,7 @@ int editar(){
 	fclose(arquivo);
 	return 0;
 }
+//excluir registro de m√∫sica
 int excluir(){
 	FILE *arquivo;
 	int id_excluir, posicao = 0, cont = 0;
@@ -361,6 +371,7 @@ int excluir(){
 	getch();
 	return 0;
 }
+//exibi√ß√£o menu
 int menu(){
 	int opcao;
 	system ("mode 150");
@@ -370,15 +381,15 @@ int menu(){
 			   "                  AQUELEFY MUSIC                  \n"
 			   "--------------------------------------------------\n"
 		       "0 - Fechar o programa\n"
-			   "1 - Cadastrar m˙sica\n"
-			   "2 - Listar m˙sicas cadastradas\n"
-			   "3 - Pesquisar m˙sica\n"
-			   "4 - Tempo total de m˙sicas\n"
-			   "5 - Exibir maior e menor m˙sica\n"
+			   "1 - Cadastrar m√∫sica\n"
+			   "2 - Listar m√∫sicas cadastradas\n"
+			   "3 - Pesquisar m√∫sica\n"
+			   "4 - Tempo total de m√∫sicas\n"
+			   "5 - Exibir maior e menor m√∫sica\n"
 			   "6 - Editar musica\n"
 			   "7 - Excluir musica\n"
 			   "8 - Ordenar lista\n");
-		printf("OpÁ„o: ");	
+		printf("Op√ß√£o: ");	
 		scanf("%d", &opcao);
 		switch(opcao){
 		case 0:
@@ -413,7 +424,7 @@ int menu(){
 			break;
 		default:
 			system("cls");
-			printf("OP«√O INVALIDA!\n");
+			printf("OP√á√ÉO INVALIDA!\n");
 			getch();
 			break;
 		}
@@ -421,6 +432,7 @@ int menu(){
 	} while (opcao != 0);
 	return 0;
 }
+//contar n√∫mero de m√∫sicas cadastradas, usado para ordena√ß√£o
 int contador(){
 	FILE *arquivo;
 	int cont = 0;
@@ -434,6 +446,7 @@ int contador(){
 	fclose(arquivo);
 	return cont;
 }
+//coloca as m√∫sicas cadastradas em ordem crescente, de acordo o ID
 int ordenar(){
 	FILE *arquivo;
 	musica m;
